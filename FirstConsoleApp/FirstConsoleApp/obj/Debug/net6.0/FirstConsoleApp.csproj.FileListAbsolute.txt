@@ -1,0 +1,14 @@
+C:\Users\aleja\Documents\Semestre 6\Desarrollo\FirstConsoleApp\FirstConsoleApp\bin\Debug\net6.0\FirstConsoleApp.exe
+C:\Users\aleja\Documents\Semestre 6\Desarrollo\FirstConsoleApp\FirstConsoleApp\bin\Debug\net6.0\FirstConsoleApp.deps.json
+C:\Users\aleja\Documents\Semestre 6\Desarrollo\FirstConsoleApp\FirstConsoleApp\bin\Debug\net6.0\FirstConsoleApp.runtimeconfig.json
+C:\Users\aleja\Documents\Semestre 6\Desarrollo\FirstConsoleApp\FirstConsoleApp\bin\Debug\net6.0\FirstConsoleApp.dll
+C:\Users\aleja\Documents\Semestre 6\Desarrollo\FirstConsoleApp\FirstConsoleApp\bin\Debug\net6.0\FirstConsoleApp.pdb
+C:\Users\aleja\Documents\Semestre 6\Desarrollo\FirstConsoleApp\FirstConsoleApp\obj\Debug\net6.0\FirstConsoleApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\aleja\Documents\Semestre 6\Desarrollo\FirstConsoleApp\FirstConsoleApp\obj\Debug\net6.0\FirstConsoleApp.AssemblyInfoInputs.cache
+C:\Users\aleja\Documents\Semestre 6\Desarrollo\FirstConsoleApp\FirstConsoleApp\obj\Debug\net6.0\FirstConsoleApp.AssemblyInfo.cs
+C:\Users\aleja\Documents\Semestre 6\Desarrollo\FirstConsoleApp\FirstConsoleApp\obj\Debug\net6.0\FirstConsoleApp.csproj.CoreCompileInputs.cache
+C:\Users\aleja\Documents\Semestre 6\Desarrollo\FirstConsoleApp\FirstConsoleApp\obj\Debug\net6.0\FirstConsoleApp.dll
+C:\Users\aleja\Documents\Semestre 6\Desarrollo\FirstConsoleApp\FirstConsoleApp\obj\Debug\net6.0\refint\FirstConsoleApp.dll
+C:\Users\aleja\Documents\Semestre 6\Desarrollo\FirstConsoleApp\FirstConsoleApp\obj\Debug\net6.0\FirstConsoleApp.pdb
+C:\Users\aleja\Documents\Semestre 6\Desarrollo\FirstConsoleApp\FirstConsoleApp\obj\Debug\net6.0\FirstConsoleApp.genruntimeconfig.cache
+C:\Users\aleja\Documents\Semestre 6\Desarrollo\FirstConsoleApp\FirstConsoleApp\obj\Debug\net6.0\ref\FirstConsoleApp.dll
