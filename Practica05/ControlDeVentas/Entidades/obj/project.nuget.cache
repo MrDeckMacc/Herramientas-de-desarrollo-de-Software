@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bDgORIg9XzEJeE7juDLnZRRzoCndqXJVfcVtA6U3Y7lLYmjIvzSgglzu5/JaIZsNBNdS+3KmJn1QUzu+53gn1A==",
+  "dgSpecHash": "Db4irmbpqA9+UXa2+H1J7fW2N/V4K5xp4SzHy6dD++qUuJZDFm7dZQo0c9IPKAK8CMQqIH5Go36NgAsRGLMxfw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\aleja\\Documents\\Semestre 6\\Desarrollo\\Practica05\\ControlDeVentas\\Entidades\\Entidades.csproj",
+  "projectFilePath": "C:\\Users\\aleja\\Documents\\Semestre 6\\Herramientas de Desarrollo de Software\\Practica05\\ControlDeVentas\\Entidades\\Entidades.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\aleja\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\aleja\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.10\\microsoft.entityframeworkcore.7.0.10.nupkg.sha512",

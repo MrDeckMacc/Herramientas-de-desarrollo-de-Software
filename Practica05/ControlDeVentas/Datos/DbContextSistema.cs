@@ -14,6 +14,7 @@ namespace Datos
 {
     public class DBContextSistema : DbContext
     {
+        public DbSet<Personas> Persona { get; set; } = null!;
         public DbSet<Roles> Rol { get; set; } = null!;
         public DbSet<Usuarios> Usuario { get; set; } = null!;
         public DbSet<Categoria> Categorias { get; set; } = null!;
@@ -30,6 +31,7 @@ namespace Datos
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new PersonaMap());
             modelBuilder.ApplyConfiguration(new RolesMap());
             modelBuilder.ApplyConfiguration(new UsuariosMap());
             modelBuilder.ApplyConfiguration(new CategoriaMap());

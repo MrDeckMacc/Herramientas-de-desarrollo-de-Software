@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "+PRE7++rYrUAIbQ6a+00FebcM33I/u7QBuZfyEU3KeDcgYpGASLcVbYqJ3pzk0QcAZqjjvIyhOwCzLy655+3kg==",
+  "dgSpecHash": "oj+dQ2kZa5Kt4eTLf+YgdqaoY69CwpNKoBdWu9BNOVJhIPKsr5XUdMP3iEnqreqwc0FOi3bVXN3ZA3rrSyyeUA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\aleja\\Documents\\Semestre 6\\Desarrollo\\Practica05\\ControlDeVentas\\Presentacion\\Presentacion.csproj",
+  "projectFilePath": "C:\\Users\\aleja\\Documents\\Semestre 6\\Herramientas de Desarrollo de Software\\Practica05\\ControlDeVentas\\Presentacion\\Presentacion.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\aleja\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\aleja\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",

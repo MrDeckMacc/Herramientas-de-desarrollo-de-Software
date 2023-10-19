@@ -1003,11 +1003,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\aleja\\Documents\\Semestre 6\\Desarrollo\\Practica05\\ControlDeVentas\\Entidades\\Entidades.csproj",
+      "projectUniqueName": "C:\\Users\\aleja\\Documents\\Semestre 6\\Herramientas de Desarrollo de Software\\Practica05\\ControlDeVentas\\Entidades\\Entidades.csproj",
       "projectName": "Entidades",
-      "projectPath": "C:\\Users\\aleja\\Documents\\Semestre 6\\Desarrollo\\Practica05\\ControlDeVentas\\Entidades\\Entidades.csproj",
+      "projectPath": "C:\\Users\\aleja\\Documents\\Semestre 6\\Herramientas de Desarrollo de Software\\Practica05\\ControlDeVentas\\Entidades\\Entidades.csproj",
       "packagesPath": "C:\\Users\\aleja\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\aleja\\Documents\\Semestre 6\\Desarrollo\\Practica05\\ControlDeVentas\\Entidades\\obj\\",
+      "outputPath": "C:\\Users\\aleja\\Documents\\Semestre 6\\Herramientas de Desarrollo de Software\\Practica05\\ControlDeVentas\\Entidades\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
