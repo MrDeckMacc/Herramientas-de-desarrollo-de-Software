@@ -17,7 +17,6 @@ namespace Presentacion.Models.Usuarios.Usuarios
         [EmailAddress]
         public string Email { get; set; } = string.Empty;
         [Required]
-        public string Password { get; set; } = string.Empty; //Este dato es string porque se recibe desde ele frontend
-        public bool Estado { get; set; }
+        public string Password { get; set; } = string.Empty;
     }
 }

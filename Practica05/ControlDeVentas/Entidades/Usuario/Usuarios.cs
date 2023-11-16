@@ -15,7 +15,6 @@ namespace Entidades.Usuario
         [Required]
         [ForeignKey("IdRol")]
         public int IdRol { get; set; }
-        public Roles IdRolNavigation { get; set; }
         [Required]
         [StringLength(150, MinimumLength = 3, ErrorMessage = "El Nombre del usario no debe tener menos de 3 carasteres ni mas de 150")]
         public string NombreUsuario { get; set; } = string.Empty;
@@ -30,6 +29,6 @@ namespace Entidades.Usuario
         [Required]
         public byte[] PasswordSalt { get; set; }
         public bool Estado { get; set; } = true;
-
+        public Roles Rol { get; set; }
     }
 }

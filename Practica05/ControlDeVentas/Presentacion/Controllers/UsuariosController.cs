@@ -8,6 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Datos;
 using Entidades.Usuario;
 using Presentacion.Models.Usuarios.Usuarios;
+using Microsoft.Extensions.Configuration;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace Presentacion.Controllers
 {
@@ -16,16 +21,86 @@ namespace Presentacion.Controllers
     public class UsuariosController : ControllerBase
     {
         private readonly DBContextSistema _context;
+        private readonly IConfiguration _configuracion;
 
-        public UsuariosController(DBContextSistema context)
+        public UsuariosController(DBContextSistema context, IConfiguration configuracion)
         {
             _context = context;
+            _configuracion = configuracion;
         }
+
+        #region Metodo Verificar Password
+        //Metodo para Verificar Password
+        private bool VerificaPassword(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            {
+                var nuevoPasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return new ReadOnlySpan<byte>(passwordHash).SequenceEqual(new ReadOnlySpan<byte>(nuevoPasswordHash));
+            }
+        }
+        #endregion
+
+        #region Metodo Crear Token
+        //Metodo para crear token
+        private string GenerarToken(List<Claim> claims) 
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuracion["Jwt:Key"]));
+            var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                _configuracion["Jnt:Issuer"],
+                _configuracion["Jwt:Issuer"],
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: credenciales,
+                claims: claims);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        #endregion
+
+        #region Metodo Login
+        // Metodo de Login
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            var email = model.Email.ToUpper();
+            var usuario = await _context.Usuario.Where(u => u.Estado == true).Include(u => u.Rol).FirstOrDefaultAsync(u => u.Email == email);
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+            var IsValido = VerificaPassword(model.Password, usuario.PasswordHash, usuario.PasswordSalt);
+            if (!IsValido)
+            {
+                return BadRequest();
+            }
+
+            var claim = new List<Claim>
+            {
+                //Claim utilizadaos en el BackEnd
+                new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()),
+                new Claim(ClaimTypes.Email, email),
+                new Claim(ClaimTypes.Role, usuario.Rol.NombreRol),
+                //Claim utilizandas en el FrontEnd
+                new Claim("IdUsuario", usuario.IdUsuario.ToString()),
+                new Claim("Rol", usuario.Rol.NombreRol),
+                new Claim("NombreUsuario", usuario.NombreUsuario)
+            };
+
+            return Ok(
+                new { token = GenerarToken(claim) }
+                );
+        }
+        #endregion
+
+        #region Metodo Listar
         // Metodo listar
         [HttpGet("[action]")]
         public async Task<IEnumerable<UsuarioViewModel>> ListarUsuarios()
         {
-            var usuarios = await _context.Usuario.Include(a => a.IdRolNavigation).ToListAsync();
+            var usuarios = await _context.Usuario.Include(a => a.Rol).ToListAsync();
             return usuarios.Select(u => new UsuarioViewModel
             {
                 IdUsuario = u.IdUsuario,
@@ -38,22 +113,12 @@ namespace Presentacion.Controllers
                 Email = u.Email,
                 PasswordHash = u.PasswordHash,
                 Estado = u.Estado,
-
-                Rol = u.IdRolNavigation.NombreRol
+                Rol = u.Rol.NombreRol
             }) ;
         }
+        #endregion
 
-        // GET: api/Usuarios
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuarios>>> GetUsuario()
-        {
-          if (_context.Usuario == null)
-          {
-              return NotFound();
-          }
-            return await _context.Usuario.ToListAsync();
-        }
-
+        #region Metodo Modificar
         //Metodo Modificar 
         [HttpPut("[action]")]
         public async Task<IActionResult> ModificarUsuarios([FromBody] ModificarUsuarioViewModel modelUsuario)
@@ -67,11 +132,7 @@ namespace Presentacion.Controllers
             {
                 return Problem("Entity set 'DBContextSistema.Usuarios'  is null.");
             }
-
             var usuario = await _context.Usuario.FirstOrDefaultAsync(u => u.IdUsuario == modelUsuario.IdUsuario);
-
-
-
             var email = modelUsuario.Email.ToUpper();
             if (await _context.Usuario.AnyAsync(u => u.Email == email && u.IdUsuario != modelUsuario.IdUsuario))
             {
@@ -89,7 +150,7 @@ namespace Presentacion.Controllers
             usuario.NumeroDocumento = modelUsuario.NumeroDocumento;
             usuario.Direccion = modelUsuario.Direccion;
             usuario.Telefono = modelUsuario.Telefono;
-            usuario.Email = modelUsuario.Email;
+            usuario.Email = modelUsuario.Email.ToUpper();
 
             if (modelUsuario.ActualizarPassword == true)
             {
@@ -102,78 +163,15 @@ namespace Presentacion.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (Exception e)
+            catch (DbUpdateConcurrencyException)
             {
-                string Error = e.Message;
-                var inner = e.InnerException;
                 return BadRequest();
             }
             return Ok();
         }
+        #endregion
 
-        // GET: api/Usuarios/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Usuarios>> GetUsuarios(int id)
-        {
-          if (_context.Usuario == null)
-          {
-              return NotFound();
-          }
-            var usuarios = await _context.Usuario.FindAsync(id);
-
-            if (usuarios == null)
-            {
-                return NotFound();
-            }
-
-            return usuarios;
-        }
-
-        // PUT: api/Usuarios/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuarios(int id, Usuarios usuarios)
-        {
-            if (id != usuarios.IdUsuario)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(usuarios).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UsuariosExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Usuarios
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Usuarios>> PostUsuarios(Usuarios usuarios)
-        {
-          if (_context.Usuario == null)
-          {
-              return Problem("Entity set 'DBContextSistema.Usuario'  is null.");
-          }
-            _context.Usuario.Add(usuarios);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUsuarios", new { id = usuarios.IdUsuario }, usuarios);
-        }
+        #region Metodo Crear Password
         // METODO CREAR PASSWORD
         public static void CreaPassword(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
@@ -183,7 +181,10 @@ namespace Presentacion.Controllers
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
-         //Metodo Insertar
+        #endregion
+
+        #region Metodo Insertar
+        //Metodo Insertar
         [HttpPost("[action]")]
         public async Task<IActionResult> InsertarUsuarios(InsertarUsuarioViewModel modelUsuario)
         {
@@ -212,10 +213,10 @@ namespace Presentacion.Controllers
                 NumeroDocumento = modelUsuario.NumeroDocumento,
                 Direccion = modelUsuario.Direccion,
                 Telefono = modelUsuario.Telefono,
-                Email = modelUsuario.Email,
+                Email = modelUsuario.Email.ToUpper(),
                 PasswordHash = passwordHash,
+                Estado = true,
                 PasswordSalt = passwordSalt,
-                Estado = modelUsuario.Estado
             };
             _context.Usuario.Add(usuario);
             try
@@ -230,26 +231,9 @@ namespace Presentacion.Controllers
             }
             return Ok();
         }
+        #endregion
 
-        // DELETE: api/Usuarios/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUsuarios(int id)
-        {
-            if (_context.Usuario == null)
-            {
-                return NotFound();
-            }
-            var usuarios = await _context.Usuario.FindAsync(id);
-            if (usuarios == null)
-            {
-                return NotFound();
-            }
-
-            _context.Usuario.Remove(usuarios);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
+        #region Metodo Desactivar
         //Metodo Desactivar Categoria
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> DesactivarUsuarios([FromRoute] int id)
@@ -279,7 +263,9 @@ namespace Presentacion.Controllers
 
             return NoContent();
         }
+        #endregion
 
+        #region Metodo Activar
         // Metodo Activar Categoria
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> ActivarUsuarios([FromRoute] int id)
@@ -309,7 +295,7 @@ namespace Presentacion.Controllers
 
             return NoContent();
         }
-
+        #endregion
 
 
         private bool UsuariosExists(int id)
